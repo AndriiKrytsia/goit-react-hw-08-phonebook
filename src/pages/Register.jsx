@@ -54,7 +54,7 @@ export const RegisterForm = () => {
           name="password"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         />
-        <button type="submit">Add contact</button>
+        <button type="submit">Sign in</button>
       </form>
     </>
   );
