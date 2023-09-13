@@ -30,7 +30,7 @@ export const ContactForm = () => {
       alert(`${name} is already in contacts`);
       return;
     }
-    dispatch(addContact({ name, phone: number }));
+    dispatch(addContact({ name, number }));
     setName('');
     setNumber('');
   };
