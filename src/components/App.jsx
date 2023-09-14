@@ -3,28 +3,43 @@ import { RegisterForm } from 'pages/Register';
 import { LoginForm } from 'pages/Login';
 import { Contacts } from 'pages/Contacts';
 import { Navigation } from 'pages/Navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { refresh } from 'redux/user/userThunk';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
+import { selectIsRefreshing } from 'redux/selector';
 
 export const App = () => {
+  const isRefreshing = useSelector(selectIsRefreshing);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(refresh());
   }, [dispatch]);
-  return (
+  return isRefreshing ? (
+    <p>LOADING...</p>
+  ) : (
     <Routes>
       <Route path="/" element={<Navigation />}>
-        <Route path="" element={<PrivateRoute />}>
-          <Route index element={<RegisterForm />} />
-          <Route path="/login" element={<LoginForm />} />
-        </Route>
-
-        <Route path="" element={<PublicRoute />}>
-          <Route path="/contacts" element={<Contacts />} />
-        </Route>
+        <Route
+          index
+          element={
+            <PublicRoute redirectTo="/contacts" component={<RegisterForm />} />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute redirectTo="/contacts" component={<LoginForm />} />
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute redirectTo="/login" component={<Contacts />} />
+          }
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
